@@ -1,18 +1,22 @@
+import logo from "../Assets/CIFRATECA__2_-removebg-preview.png"
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
+import Input from "../Styles/Input";
+import Button from "../Styles/Button";
+import InputDisable from "../Styles/InputDisable";
 
-export default function SignUp() {
+export default function SignUpPage() {
     const [loading, setLoading] = useState(false);
     const [perfilUrl, setPerfilUrl] = useState("");
     const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
     const navigate = useNavigate();
     
     const data = {
-        name,
+        username,
         password,
         perfilUrl
     }
@@ -22,34 +26,35 @@ export default function SignUp() {
         event.preventDefault()
         setLoading(true)
 
-        const required = axios.post("", data);
-        required.then(() => navigate("/"));
-        required.catch(() => alert("Não foi possível efetuar o cadastro, tente novamente!"));
+        const required = axios.post("http://localhost:5000/signup", data);
+        required.then(() => navigate("/login"));
+        required.catch((error) =>{ alert("Não foi possível efetuar o cadastro, tente novamente!"); console.log(error)});
     }
     return loading === false ? (
-        <HomePage>
+        <SignUpPageStyled>
+            <img src={logo} alt="" />
             <form onSubmit={DataSignIn}>
-                <input type="text" placeholder="Nome de Usuário" value = {name} onChange={(e) => setName(e.target.value)} required/>
-                <input type="password" placeholder='Senha' value = {password} onChange={(e) => setPassword(e.target.value)} required/>
-                <input type="text" placeholder='Url da Imagem do Perfil' value = {perfilUrl} onChange={(e) => setPerfilUrl(e.target.value)} required/>
-                <button type="submit">Entrar</button>
+                <Input type="text" placeholder="Nome de Usuário" value = {username} onChange={(e) => setUsername(e.target.value)} required/>
+                <Input type="password" placeholder='Senha' value = {password} onChange={(e) => setPassword(e.target.value)} required/>
+                <Input type="text" placeholder='Url da Imagem do Perfil' value = {perfilUrl} onChange={(e) => setPerfilUrl(e.target.value)} />
+                <Button type="submit">Entrar</Button>
             </form>
             <Link to="/login"><p>Já possuí uma conta? Entre</p></Link>
-        </HomePage>
+        </SignUpPageStyled>
     ) : (
-        <HomePage>
-            <form className="opacity">
-            <input type="text" placeholder="Nome" value = {name} onChange={(e) => setName(e.target.value)} disabled/>
-                <input type="password" placeholder='Senha' value = {password} onChange={(e) => setPassword(e.target.value)} disabled/>
-                <input type="text" placeholder='url da imagem do perfil' value = {perfilUrl} onChange={(e) => setPerfilUrl(e.target.value)} disabled/>
-                <button><ThreeDots color="#FFFFFF" width={298} height={15} /></button>
+        <SignUpPageStyled>
+            <form>
+            <InputDisable type="text" placeholder="Nome" value = {username} onChange={(e) => setUsername(e.target.value)} disabled/>
+                <InputDisable type="password" placeholder='Senha' value = {password} onChange={(e) => setPassword(e.target.value)} disabled/>
+                <InputDisable type="text" placeholder='url da imagem do perfil' value = {perfilUrl} onChange={(e) => setPerfilUrl(e.target.value)} disabled/>
+                <Button><ThreeDots color="#FFFFFF" width={298} height={15} /></Button>
             </form>
-            <p>Já possuí uma conta? Entre</p>
-        </HomePage>
+            <p>Já possui uma conta? Entre</p>
+        </SignUpPageStyled>
     )
 }
 
-const HomePage = styled.div`
+const SignUpPageStyled = styled.div`
 width: 100vw;
 height: 100vh;
 display: flex;
@@ -58,52 +63,16 @@ justify-content: center;
 align-items: center;
 
 img {
+    background-color: lightgray;
+    width: 299px;
+    border: 1px solid lightgray; 
+    border-radius: 10px;
+    margin-bottom: 16px;
     
-    margin-bottom: 100.93px;
 }
 
 form {
     width:303px;
-
-
-    input {
-        width: 299px;
-        height: 52px;
-        background: #FFFFFF;
-        border: 1px solid #D5D5D5;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        font-size: 19px;
-        font-weight: 400;
-        padding-left: 11px;
-
-        &::placeholder {
-            width: 280px;
-            height: 25px;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 25px;
-            color: #7E7E7E;
-        }
-        &:focus {
-            box-shadow: 0 0 0 0;
-            border: 0 none;
-            outline: 0;
-        }
-    }
-
-    button{
-        width: 298px;
-        height: 52px;
-        background: rgb(2, 2, 234);
-        border-radius: 8px;
-        border: 0;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 16px;
-        color: #FFFFFF;
-        margin: 8px 0 25px 0;
-    }
 }
 
 p {
@@ -115,17 +84,5 @@ p {
     text-align: center;
     text-decoration-line: underline;
     color: #000000;
-}
-
-.opacity {
-    opacity: 0.7;
-
-    input {
-        background: #f2f2f2;
-        color: #AFAFAF;
-        font-weight: 400;
-        font-size: 19.976px;
-        line-height: 25px;
-    }
 }
 `

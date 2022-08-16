@@ -50,12 +50,19 @@ const GeneralStyle = createGlobalStyle`
         border-spacing: 0;
     }
     *{
-        background-color: lightgray;
         box-sizing: border-box;
         font-family: 'Lexend Deca', sans-serif;
     }
     a {
         text-decoration: none;
+    }
+    .root {
+        margin: 5px 5px;
+        background-color: lightgray;
+        border-radius: 10px;
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 `
 
